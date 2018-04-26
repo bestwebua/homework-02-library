@@ -1,7 +1,7 @@
 require_relative '../app/author'
 
 describe Author do
-  subject(:author) { Author.new('Test Author', 'Awesome Bio') }
+  subject(:author) { Author.new(name: 'Test Author', biography: 'Awesome Bio') }
 
   describe '#new' do
     subject(:fail_author) { Author.new }

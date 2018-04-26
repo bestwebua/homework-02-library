@@ -1,7 +1,7 @@
 require_relative '../app/reader'
 
 describe Reader do
-  subject(:reader) { Reader.new('Name', 'email@email.com', 'City', 'Street', 'House') }
+  subject(:reader) { Reader.new(name: 'Name', email: 'email@email.com', city: 'City', street: 'Street', house: 'House') }
 
   describe '#new' do
     subject(:fail_reader) { Reader.new }

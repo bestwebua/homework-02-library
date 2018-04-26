@@ -1,7 +1,7 @@
 require_relative '../app/order'
 
 describe Order do
-  subject(:order) { Order.new('Book', 'Reader', 'Date') }
+  subject(:order) { Order.new(book: 'Book', reader: 'Reader', date: 'Date') }
 
   describe '#new' do
     subject(:fail_order) { Order.new }

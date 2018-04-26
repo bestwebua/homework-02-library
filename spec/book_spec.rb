@@ -1,7 +1,7 @@
 require_relative '../app/book'
 
 describe Book do
-  subject(:book) { Book.new('Test Book', 'Anonymous') }
+  subject(:book) { Book.new(title: 'Test Book', author: 'Anonymous') }
 
   describe '#new' do
     subject(:fail_book) { Book.new }
