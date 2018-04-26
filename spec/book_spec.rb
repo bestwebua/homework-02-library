@@ -9,7 +9,7 @@ describe Book do
       expect {fail_book}.to raise_error(ArgumentError)
     end
 
-    it 'instance of class Book' do
+    it 'object should be an instance of Book class' do
       expect(book).to be_an_instance_of(Book)
     end
   end
