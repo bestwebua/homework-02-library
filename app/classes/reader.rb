@@ -1,5 +1,3 @@
-require_relative '../constructor'
-
 class Reader < LibraryUnionClass
   attr_reader :name, :email, :city, :street, :house
 

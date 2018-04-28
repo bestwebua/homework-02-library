@@ -1,5 +1,3 @@
-require_relative '../constructor'
-
 class Order < LibraryUnionClass
   attr_reader :book, :reader, :date
 

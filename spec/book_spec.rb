@@ -1,3 +1,4 @@
+require_relative '../app/constructor'
 require_relative '../app/classes/book'
 
 describe Book do
