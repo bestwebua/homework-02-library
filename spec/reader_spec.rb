@@ -1,4 +1,4 @@
-require_relative '../app/reader'
+require_relative '../app/classes/reader'
 
 describe Reader do
   subject(:reader) { Reader.new(name: 'Name', email: 'email@email.com', city: 'City', street: 'Street', house: 'House') }

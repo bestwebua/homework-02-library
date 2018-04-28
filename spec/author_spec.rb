@@ -1,4 +1,4 @@
-require_relative '../app/author'
+require_relative '../app/classes/author'
 
 describe Author do
   subject(:author) { Author.new(name: 'Test Author', biography: 'Awesome Bio') }

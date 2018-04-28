@@ -1,15 +1,14 @@
-require_relative 'author'
-require_relative 'book'
-require_relative 'order'
-require_relative 'reader'
+require_relative 'constructor'
 
 class Library
-  attr_accessor :authors, :books, :oders, :readers
 
-  def initialize(authors: [], books: [], orders: [], readers: [], **args)
-    @authors = authors
-    @books = books
-    @orders = orders
-    @readers = readers
+  @@constructor = Constructor
+
+  def initialize
+    @@constructor.attributes.each do |attribute|
+      self.class.class_eval { attr_accessor attribute }
+      self.instance_variable_set("@#{attribute}", [])
+    end
   end
+
 end

@@ -1,4 +1,4 @@
-require_relative '../app/book'
+require_relative '../app/classes/book'
 
 describe Book do
   subject(:book) { Book.new(title: 'Test Book', author: 'Anonymous') }

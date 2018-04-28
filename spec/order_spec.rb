@@ -1,4 +1,4 @@
-require_relative '../app/order'
+require_relative '../app/classes/order'
 
 describe Order do
   subject(:order) { Order.new(book: 'Book', reader: 'Reader', date: 'Date') }
