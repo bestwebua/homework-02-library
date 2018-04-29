@@ -33,4 +33,18 @@ describe Order do
       expect(order.date).to eq('Date')
     end
   end
+
+  describe 'inheritance from LibraryUnionClass' do
+    it '#attributes should return all Order attr_reader attributes as array' do
+      expect(order.attributes).to eq([:book, :reader, :date])
+    end
+
+    it '#attributes should return all Order attr_reader attributes in default order' do
+      expect(order.attributes).to_not eq([:reader, :book, :date])
+    end
+
+    it '#attributes should return Order attr_reader attributes only' do
+      expect(order.attributes).to_not eq([:book, :reader, :date, :some_attr])
+    end
+  end
 end

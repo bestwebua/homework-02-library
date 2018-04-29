@@ -27,4 +27,18 @@ describe Book do
       expect(book.author).to eq('Anonymous')
     end
   end
+
+  describe 'inheritance from LibraryUnionClass' do
+    it '#attributes should return all Book attr_reader attributes as array' do
+      expect(book.attributes).to eq([:title, :author])
+    end
+    
+    it '#attributes should return all Book attr_reader attributes in default order' do
+      expect(book.attributes).to_not eq([:author, :title])
+    end
+
+    it '#attributes should return Book attr_reader attributes only' do
+      expect(book.attributes).to_not eq([:title, :author, :some_attr])
+    end
+  end
 end

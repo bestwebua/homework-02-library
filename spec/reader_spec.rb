@@ -45,4 +45,18 @@ describe Reader do
       expect(reader.house).to eq('House')
     end
   end
+
+  describe 'inheritance from LibraryUnionClass' do
+    it '#attributes should return all Reader attr_reader attributes as array' do
+      expect(reader.attributes).to eq([:name, :email, :city, :street, :house])
+    end
+
+    it '#attributes should return all Reader attr_reader attributes in default order' do
+      expect(reader.attributes).to_not eq([:email, :name, :city, :street, :house])
+    end
+
+    it '#attributes should return Reader attr_reader attributes only' do
+      expect(reader.attributes).to_not eq([:name, :email, :city, :street, :house, :some_attr])
+    end
+  end
 end
