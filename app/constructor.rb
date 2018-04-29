@@ -43,6 +43,11 @@ class Constructor
       end.to_h
   end
 
+  def self.instance_variable(target)
+    @vars ||= self.classes.keys.zip(self.attributes.map { |item| '@' + item.to_s }).to_h
+    @vars[target]
+  end
+
   class << self
 
     protected
