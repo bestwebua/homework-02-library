@@ -3,6 +3,7 @@ require_relative '../app/classes/order'
 
 describe Order do
   subject(:order) { Order.new(book: 'Book', reader: 'Reader', date: 'Date') }
+  subject(:next_order) { Order.new(book: 'Book', reader: 'Reader', date: 'Date') }
 
   describe '#new' do
     subject(:fail_order) { Order.new }
@@ -17,7 +18,7 @@ describe Order do
   end
 
   describe '#book' do
-    it "should return book from the order" do
+    it 'should return book from the order' do
       expect(order.book).to eq('Book')
     end
   end
@@ -34,13 +35,19 @@ describe Order do
     end
   end
 
+  describe '#id' do
+    it 'should return unique order id' do
+      expect(order.id).to_not eq(next_order.id)
+    end
+  end
+
   describe 'inheritance from LibraryUnionClass' do
     it '#attributes should return all Order attr_reader attributes as array' do
-      expect(order.attributes).to eq([:book, :reader, :date])
+      expect(order.attributes).to eq([:book, :reader, :date, :id])
     end
 
     it '#attributes should return all Order attr_reader attributes in default order' do
-      expect(order.attributes).to_not eq([:reader, :book, :date])
+      expect(order.attributes).to_not eq([:reader, :book, :date, :id])
     end
 
     it '#attributes should return Order attr_reader attributes only' do

@@ -18,4 +18,11 @@ class Library
     accessor << new_object
   end
 
+  def delete(target, **query)
+    target.capitalize!
+      accessor = eval(@@constructor.instance_variable(target))
+      attribute, value = query.keys.first, query.values.first
+    accessor.delete_if { |object| object.send(attribute) == value }
+  end
+
 end
