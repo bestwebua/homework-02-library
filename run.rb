@@ -20,4 +20,4 @@ library.add('reader',
 library.add('order',
             book: library.books.last,
             reader: library.readers.last,
-            date: Time.new.strftime('%d.%m.%y'))
+            date: Time.now.strftime('%d.%m.%y'))
