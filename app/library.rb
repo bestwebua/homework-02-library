@@ -25,4 +25,16 @@ class Library
     accessor.delete_if { |object| object.send(attribute) == value }
   end
 
+  def top_reader
+    self.orders.group_by(&:reader).max_by { |k, v| v.size }.first
+  end
+
+  def top_book
+    self.orders.group_by(&:book).max_by { |k, v| v.size }.first
+  end
+
+  def count_readers_of_bestsellers_top3
+    self.orders.group_by(&:book).max_by(3) { |k, v| v.size }.flatten.select { |obj| obj.is_a?(Order) }.uniq(&:reader).size
+  end
+
 end
