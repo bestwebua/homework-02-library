@@ -3,7 +3,7 @@ require_relative '../app/library'
 describe 'Constructor class loader' do
   subject(:was_constructor_loaded?) { defined?(Constructor) == 'constant' }
 
-  it 'should return true' do
+  it 'return true' do
     expect(was_constructor_loaded?).to eq(true)
   end
 end
@@ -33,11 +33,11 @@ describe Library do
         library.add('author', name: 'Test Author', biography: 'Bio')
       end
 
-      it 'should equal to 1 if new author was added' do
+      it 'equal to 1 if new author was added' do
         expect(authors.size).to eq(1)
       end
 
-      it "should return true if item is an object of Author's class" do
+      it "return true if item is an object of Author's class" do
         expect(authors.last.is_a?(Author)).to eq(true)
       end
     end
@@ -47,11 +47,11 @@ describe Library do
         library.add('book', title: 'Test Book', author: library.authors.last)
       end
 
-      it 'should equal to 1 if new book was added' do
+      it 'equal to 1 if new book was added' do
         expect(books.size).to eq(1)
       end
 
-      it "should return true if item is an object of Book's class" do
+      it "return true if item is an object of Book's class" do
         expect(books.last.is_a?(Book)).to eq(true)
       end
     end
@@ -61,11 +61,11 @@ describe Library do
         library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
       end
 
-      it 'should equal to 1 if new reader was added' do
+      it 'equal to 1 if new reader was added' do
         expect(readers.size).to eq(1)
       end
 
-      it "should return true if item is an object of Reader's class" do
+      it "return true if item is an object of Reader's class" do
         expect(readers.last.is_a?(Reader)).to eq(true)
       end
     end
@@ -75,11 +75,11 @@ describe Library do
         library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
       end
 
-      it 'should equal to 1 if new order was added' do
+      it 'equal to 1 if new order was added' do
         expect(orders.size).to eq(1)
       end
 
-      it "should return true if item is an object of Order's class" do
+      it "return true if item is an object of Order's class" do
         expect(orders.last.is_a?(Order)).to eq(true)
       end
     end
@@ -92,7 +92,7 @@ describe Library do
         library.delete('author', name: 'Test Author')
       end
 
-      it 'should equal to 0 if author was found and deleted' do
+      it 'equal to 0 if author was found and deleted' do
         expect(authors.size).to eq(0)
       end
     end
@@ -102,7 +102,7 @@ describe Library do
         library.delete('book', title: 'Test Book')
       end
 
-      it 'should equal to 0 if book was found and deleted' do
+      it 'equal to 0 if book was found and deleted' do
         expect(books.size).to eq(0)
       end
     end
@@ -112,7 +112,7 @@ describe Library do
         library.delete('reader', name: 'John Doe')
       end
 
-      it 'should equal to 0 if book was found and deleted' do
+      it 'equal to 0 if book was found and deleted' do
         expect(readers.size).to eq(0)
       end
     end
@@ -122,9 +122,81 @@ describe Library do
         library.delete('order', id: '00001')
       end
 
-      it 'should equal to 0 if order was found and deleted' do
+      it 'equal to 0 if order was found and deleted' do
         expect(orders.size).to eq(0)
       end
+    end
+  end
+
+  describe '#top_reader' do
+    subject(:fail_top_reader) { library.top_reader }
+    subject(:top_reader) do
+      library.add('author', name: 'Test Author', biography: 'Bio')
+      library.add('book', title: 'Test Book 0', author: library.authors.last)
+      library.add('book', title: 'Test Book 1', author: library.authors.last)
+      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.top_reader
+    end
+
+    it 'return nil if nothing found' do
+      expect(fail_top_reader).to eq(nil)
+    end
+
+    it 'should equal to most active reader' do
+      expect(top_reader.name).to eq('John Doe')
+    end
+  end
+
+  describe '#top_book' do
+    subject(:fail_top_book) { library.top_book }
+    subject(:top_book) do
+      library.add('author', name: 'Test Author', biography: 'Bio')
+      library.add('book', title: 'Test Book 0', author: library.authors.last)
+      library.add('book', title: 'Test Book 1', author: library.authors.last)
+      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.last, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.top_book
+    end
+
+    it 'return nil if nothing found' do
+      expect(fail_top_book).to eq(nil)
+    end
+
+    it 'should equal to most popular book' do
+      expect(top_book.title).to eq('Test Book 0')
+    end
+  end
+
+  describe '#count_readers_of_bestsellers_top3' do
+    subject(:empty_top) { library.count_readers_of_bestsellers_top3 }
+    subject(:top3_books_uniq_readers) do
+      library.add('author', name: 'Test Author', biography: 'Bio')
+      library.add('book', title: 'Test Book 0', author: library.authors.last)
+      library.add('book', title: 'Test Book 1', author: library.authors.last)
+      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
+      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.last, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
+      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.count_readers_of_bestsellers_top3
+    end
+
+    it 'return 0 if readers of top3 was not found' do
+      expect(empty_top).to eq(0)
+    end
+
+    it 'return count for uniq readers only' do
+      expect(top3_books_uniq_readers).to eq(2)
     end
   end
 
