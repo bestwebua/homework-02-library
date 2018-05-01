@@ -28,16 +28,16 @@ describe Author do
     end
   end
 
-  describe 'inheritance from LibraryUnionClass' do
-    it '#attributes should return all Author attr_reader attributes as array' do
+  describe '#attributes' do
+    it 'should return all Author attr_reader attributes as array' do
       expect(author.attributes).to eq([:name, :biography])
     end
 
-    it '#attributes should return all Author attr_reader attributes in default order' do
+    it 'should return all Author attr_reader attributes in default order' do
       expect(author.attributes).to_not eq([:biography, :name])
     end
 
-    it '#attributes should return Author attr_reader attributes only' do
+    it 'should return Author attr_reader attributes only' do
       expect(author.attributes).to_not eq([:name, :biography, :some_attr])
     end    
   end
