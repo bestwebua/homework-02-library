@@ -13,10 +13,6 @@ module Storage
     'Data import was completed successfully!'
   end
 
-  def filename_reset
-    @filename = nil
-  end
-
   def save(custom_filename=nil)
     path = "#{File.absolute_path('data')}"
       autoname = ('data-' + Time.now.strftime('%Y%m%d-%H%M%S'))
