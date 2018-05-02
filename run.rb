@@ -32,6 +32,6 @@ library.top_reader
 library.top_book
 library.count_readers_of_bestsellers_top3
 
-lirary.load('test')           # will load test.yml from data folder 
+library.load('test')          # will load test.yml from data folder 
 library.save                  # if load from somefile.yml will rewrite this file, else will create autonamed file
 library.save('filename')      # with argumens save to the filename.yml
