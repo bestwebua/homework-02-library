@@ -1,8 +1,9 @@
 # Library #
 
-## The Task: Write program that determines: ##
+## The Task ##
 
-* Who often takes the book
+### Write program that determines ###
+* Who often takes books
 * What is the most popular book
 * How many people ordered one of the three most popular books
 * Save all Library data to file(s)
