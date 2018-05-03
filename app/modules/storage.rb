@@ -27,6 +27,8 @@ module Storage
       else custom_filename
     end
 
+    @filename = filename
+
     File.open("#{path}/#{filename}.yml", 'w') { |file| file.write(YAML.dump(self)) }
   end
 end
