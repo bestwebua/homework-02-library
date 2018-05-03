@@ -21,7 +21,7 @@ describe Library do
         library.instance_variables.map { |acc| acc[/[^@]+/].to_sym }
       end
 
-      it 'attribute accessors should created dynamically' do
+      it 'attribute accessors should be created dynamically' do
         expect(accessors).to eq(Constructor.attributes)
       end
     end
