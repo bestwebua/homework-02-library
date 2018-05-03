@@ -21,7 +21,7 @@ describe Library do
         library.instance_variables.map { |acc| acc[/[^@]+/].to_sym }
       end
 
-      it 'attribute accessors should created dynamically' do
+      it 'attribute accessors should be created dynamically' do
         expect(accessors).to eq(Constructor.attributes)
       end
     end
@@ -131,16 +131,7 @@ describe Library do
   describe '#top_reader' do
     subject(:fail_top_reader) { library.top_reader }
     subject(:top_reader) do
-      library.add('author', name: 'Test Author', biography: 'Bio')
-      library.add('book', title: 'Test Book 0', author: library.authors.last)
-      library.add('book', title: 'Test Book 1', author: library.authors.last)
-      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
-      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.load('rspec')
       library.top_reader
     end
 
@@ -156,14 +147,7 @@ describe Library do
   describe '#top_book' do
     subject(:fail_top_book) { library.top_book }
     subject(:top_book) do
-      library.add('author', name: 'Test Author', biography: 'Bio')
-      library.add('book', title: 'Test Book 0', author: library.authors.last)
-      library.add('book', title: 'Test Book 1', author: library.authors.last)
-      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.last, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.load('rspec')
       library.top_book
     end
 
@@ -179,15 +163,7 @@ describe Library do
   describe '#count_readers_of_bestsellers_top3' do
     subject(:empty_top) { library.count_readers_of_bestsellers_top3 }
     subject(:top3_books_uniq_readers) do
-      library.add('author', name: 'Test Author', biography: 'Bio')
-      library.add('book', title: 'Test Book 0', author: library.authors.last)
-      library.add('book', title: 'Test Book 1', author: library.authors.last)
-      library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('reader', name: 'Jane Doe', email: 'jane_doe@domain.com', city: 'City', street: 'Street', house: '42')
-      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.first, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.last, reader: library.readers.first, date: Time.now.strftime('%d.%m.%y'))
-      library.add('order', book: library.books.first, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
+      library.load('rspec')
       library.count_readers_of_bestsellers_top3
     end
 
@@ -196,8 +172,69 @@ describe Library do
     end
 
     it 'return count for uniq readers only' do
-      expect(top3_books_uniq_readers).to eq(2)
+      expect(top3_books_uniq_readers).to eq(1)
     end
   end
 
+  describe '#load' do
+    subject(:without_filename) { library.load }
+    subject(:nonexistent_file) { library.load('nonexistent_file') }
+    subject(:existing_file)    { library.load('rspec') }
+    subject(:successful_load)  { library.load('rspec') and library.filename }
+
+    it 'raise an ArgumentError error' do
+      expect { without_filename }.to raise_error(ArgumentError)
+    end
+
+    it "return 'File not found'" do
+      expect(nonexistent_file).to eq('File not found')
+    end
+
+    it "return 'Data import was completed successfully!'" do
+      expect(existing_file).to eq('Data import was completed successfully!')
+    end
+
+    it 'return source file name which data was loaded' do
+      expect(successful_load).to eq('rspec')
+    end
+  end
+
+  describe '#save' do
+    subject(:load_and_save_without_filename) do
+      library.load('rspec')
+      library.add('author', name: 'TestName', biography: 'Bio')
+      library.save
+      library.load('rspec')
+      library.authors.last.name
+    end
+
+    subject(:load_and_save_with_new_name) do
+      library.load('rspec')
+      library.delete('author', name: 'TestName')
+      library.save('rspec')
+      library.load('rspec')
+      library.authors.last.name
+    end
+
+    subject(:save_without_filename) do
+      new_library = Library.new
+      new_library.add('author', name: 'TestName', biography: 'Bio')
+      new_library.save
+      autonamed_file = new_library.filename
+    end
+
+    it 'return true' do
+      expect(load_and_save_without_filename).to eq('TestName')
+    end
+
+    it 'return true' do
+      expect(load_and_save_with_new_name).to_not eq('TestName')
+    end
+
+    it 'return true' do
+      file = "#{File.expand_path('../data/.', File.dirname(__FILE__))}/#{save_without_filename}.yml"
+      expect(File.exist?(file)).to eq(true)
+      File.delete(file)
+    end
+  end
 end
