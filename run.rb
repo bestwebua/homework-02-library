@@ -15,12 +15,16 @@ library.top_reader
 library.top_book
 library.count_readers_of_bestsellers_top3
 
+# it will rewrite all current Library data
 library.load('test')
 
-# .save method is smart method.
-# .save - in case when method was used without args it will save data into a named YAML file.
-# If you have used .load('filename') before, .save will rewrite your filename.yml
-# .save('otherfile') - will save data to data/otherfile.yml
+library.add('author', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')
+library.add('book', title: 'The Mentalist', author: library.authors.last)
+library.add('reader', name: 'Patrick Jane', email: 'patrick_jane@domain.com', city: 'Sacramento', street: 'Street', house: '42')
+library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
 
+# .save - in case when method was used without args it will save data into autonamed YAML file.
+# If you have used .load('filename') before, .save will rewrite your filename.yml
 library.save
-library.save('filename')
+
+# .save('otherfile') - will save data to data/otherfile.yml

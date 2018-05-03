@@ -25,7 +25,7 @@ This module is extend Library class functional to load and save data from data/ 
 .load('filename') - example for load data from exist YAML-file located into project data folder. Please note, .load method will be rewrite all data of Library, not merge or add.
 
 .save method is smart method.
-.save - in case when method was used without args it will save data into a named YAML file. If you have used .load('filename') before, .save will rewrite your filename.yml
+.save - in case when method was used without args it will save data into autonamed YAML file. If you have used .load('filename') before, .save will rewrite your filename.yml
 .save('otherfile') - will save data to data/otherfile.yml
 
 For more examples see run.rb in project root folder.
