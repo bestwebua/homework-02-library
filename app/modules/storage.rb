@@ -1,6 +1,8 @@
 require 'yaml'
 
 module Storage
+  attr_reader :filename
+  
   def load(filename)
     return 'File not found' unless File.exist?("#{File.absolute_path('data')}/#{filename}.yml")
     

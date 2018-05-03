@@ -1,0 +1,39 @@
+--- !ruby/object:Library
+authors:
+- &1 !ruby/object:Author
+  name: Test Author
+  biography: Bio
+- !ruby/object:Author
+  name: Test
+  biography: Bio
+- !ruby/object:Author
+  name: Test
+  biography: Bio
+- !ruby/object:Author
+  name: Test
+  biography: Bio
+books:
+- &3 !ruby/object:Book
+  title: Test Book 0
+  author: *1
+readers:
+- &2 !ruby/object:Reader
+  name: John Doe
+  email: john_doe@domain.com
+  city: City
+  street: Street
+  house: '42'
+- !ruby/object:Reader
+  name: Jane Doe
+  email: jane_doe@domain.com
+  city: City
+  street: Street
+  house: '42'
+tests: 
+orders:
+- !ruby/object:Order
+  id: '00001'
+  date: 02.05.18
+  reader: *2
+  book: *3
+filename: rspec
