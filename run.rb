@@ -23,6 +23,10 @@ library.add('book', title: 'The Mentalist', author: library.authors.last)
 library.add('reader', name: 'Patrick Jane', email: 'patrick_jane@domain.com', city: 'Sacramento', street: 'Street', house: '42')
 library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
 
+# Types of target are case insensitive, possible to create object like in case below:
+# library.add('Author', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')
+# library.add('AUTHOR', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')
+
 # .save - in case when method was used without args it will save data into autonamed YAML file.
 # If you have used .load('filename') before, .save will rewrite your filename.yml
 library.save

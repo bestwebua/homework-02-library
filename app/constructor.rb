@@ -1,8 +1,3 @@
-def library_union_loader
-  path = "#{File.expand_path(File.dirname(__FILE__))}"
-  Dir.glob("#{path}/*/*").each { |file| require file }
-end
-
 class LibraryUnionClass
   def self.attr_reader(*attrs)
     @attributes ||= []
@@ -19,10 +14,10 @@ class LibraryUnionClass
   end
 end
 
-library_union_loader
-
 class Constructor
   def self.build
+    self.library_union_loader
+
     path = "#{File.expand_path(File.dirname(__FILE__))}"
     files = Dir.glob("#{path}/*/*")
     pattern = /.+\/app\/(.+)\/(.+).rb\z/
@@ -51,5 +46,12 @@ class Constructor
 
   def self.modules
     @modules ||= self.build['modules'].map(&:capitalize)
+  end
+
+  private
+
+  def self.library_union_loader
+    app_root = "#{File.expand_path(File.dirname(__FILE__))}"
+    Dir.glob("#{app_root}/*/*").each { |file| require file }
   end
 end

@@ -17,10 +17,10 @@
 * Library: books, orders, readers, authors
 
 #### Library Class Description ####
-The Library class is dynamically created using the Constructor class. Class attributes based on class names located in app/classes folder. Class modules dynamically loaded into class from app/modules folder. You can extend the capabilities of the Library class just by simply adding the necessary files to the appropriate folders. Use files from app/classes/ and app/modules as pattern. You can add and delete into Library any objects, whose class was published into app/classes folder.
+The Library class is dynamically created class using the Constructor class. Class attributes based on class names located in app/classes folder. Class modules dynamically loaded into class from app/modules folder. You can extend the capabilities of the Library class just by simply adding the necessary files to the appropriate folders. To do this, use files from app/classes/ and app/modules as pattern. You can add and delete into Library any objects, whose class was published into app/classes folder.
 
 #### Module: Storage ####
-This module is extend Library class functional to load and save data from data/ folder in root project dir. Keep in mind that working with .yml files is available from a data/ folder only.
+This module is extend Library class functional to load and save data from project_root/data folder. Keep in mind that working with .yml files which are available available from a data/ folder only.
 
 .load('filename') - example for load data from exist YAML-file located into project data folder. Please note, .load method will be rewrite all data of Library, not merge or add.
 

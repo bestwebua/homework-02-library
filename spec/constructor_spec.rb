@@ -1,4 +1,3 @@
-require 'fileutils'
 require_relative '../app/constructor'
 
 describe 'LibraryUnionClass' do
@@ -7,49 +6,46 @@ describe 'LibraryUnionClass' do
   end
 end
 
-describe '#library_union_loader' do
-
-  subject(:modules_files) do
-    Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size
-  end
-  subject(:classes_files) do
-    Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size
-  end
-  subject(:loaded_modules) { Constructor.modules.size }
-  subject(:loaded_classes) { Constructor.classes.keys.size }
-
-  it 'should load all *.rb files from modules dir' do
-    expect(modules_files).to eq(loaded_modules)
-  end
-
-  it 'should load all *.rb files from classes dir' do
-    expect(classes_files).to eq(loaded_classes)
-  end
-end
-
 describe Constructor do
+  before(:context) do
+    copied_files, filename_pattern = [], /(.+)\/(.+\.rb)\z/
 
-# How to load it before Constructor class run?
-  let!(:load_test_classes) do
     classes_dir = "#{File.expand_path('../app/classes', File.dirname(__FILE__))}"
     test_classes_dir = "#{File.expand_path('./test_classes/.', File.dirname(__FILE__))}"
     test_classes_files = Dir.glob("#{test_classes_dir}/*.rb")
-    test_classes_files.each { |file| FileUtils.cp(file, classes_dir) }
+
+    test_classes_files.each do |file|
+      FileUtils.cp(file, classes_dir)
+      copied_files << file
+    end
+
+    copied_files.map! { |file| file[/#{filename_pattern}/,2] }
+
+    @files_to_del = Dir.glob("#{classes_dir}/*.rb").select do |file|
+      copied_files.include?(file[/#{filename_pattern}/,2])
+    end
+  end
+
+  after(:context) do
+    @files_to_del.each { |file| File.delete(file) }
   end
 
   subject(:constructor) { Constructor }
 
-=begin
-# How do this code after finish all Constructor class tests
-  let(:delete_test_classes) do
-    classes_dir = "#{File.expand_path('../app/classes', File.dirname(__FILE__))}"
-    classes_files = Dir.glob("#{classes_dir}/*.rb")
-    test_classes_dir = "#{File.expand_path('./test_classes/.', File.dirname(__FILE__))}"
-    test_classes_files = Dir.glob("#{test_classes_dir}/*.rb")
-    files_to_delete = (classes_files & test_classes_files)
-    files_to_delete.each { |file| remove_file(file, force = false) }
+  describe '.library_union_loader' do
+    subject(:modules_files)  { Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size }
+    subject(:classes_files)  { Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size }
+    subject(:loaded_modules) { Constructor.modules.size }
+    subject(:loaded_classes) { Constructor.classes.keys.size }
+
+    it 'should load all *.rb files from modules dir' do
+      expect(modules_files).to eq(loaded_modules)
+    end
+
+    it 'should load all *.rb files from classes dir' do
+      expect(classes_files).to eq(loaded_classes)
+    end
   end
-=end
 
   describe '.build' do
     subject(:build) { constructor.build }
@@ -111,20 +107,30 @@ describe Constructor do
     end
   end
 
-=begin
-  # `instance_variable` is not available on an example group... How test it?
   describe '.instance_variable' do
     subject(:instance_variable) { constructor.instance_variable('Test') }
 
-    puts instance_variable
+    it 'should be a string' do
+      expect(instance_variable.is_a?(String)).to eq(true)
+    end
+
+    it "should return '@tests' value by 'Test' key" do
+      expect(instance_variable).to eq('@tests')
+    end
   end
 
-  # `modules` is not available on an example group... How test it?
   describe '.modules' do
-  subject(:modules) { constructor.modules }
+    subject(:modules) { constructor.modules.sort }
+    subject(:modules_files) do
+      Dir.new('app/modules').entries.map { |file| file[/(.+)\.rb/,1] }.compact.map(&:capitalize).sort
+    end
 
-    puts modules
+    it 'should be an array' do
+      expect(modules.is_a?(Array)).to eq(true)
+    end
+
+    it 'should be equal to real files' do
+      expect(modules).to eq(modules_files)
+    end
   end
-=end
-
 end
