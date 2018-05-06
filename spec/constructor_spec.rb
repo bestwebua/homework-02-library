@@ -7,34 +7,13 @@ describe 'LibraryUnionClass' do
   end
 end
 
-describe '#library_union_loader' do
-
-  subject(:modules_files) do
-    Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size
-  end
-  subject(:classes_files) do
-    Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size
-  end
-  subject(:loaded_modules) { Constructor.modules.size }
-  subject(:loaded_classes) { Constructor.classes.keys.size }
-
-  it 'should load all *.rb files from modules dir' do
-    expect(modules_files).to eq(loaded_modules)
-  end
-
-  it 'should load all *.rb files from classes dir' do
-    expect(classes_files).to eq(loaded_classes)
-  end
-end
-
 describe Constructor do
-
-# How to load it before Constructor class run?
-  let!(:load_test_classes) do
+  before(:context) do
     classes_dir = "#{File.expand_path('../app/classes', File.dirname(__FILE__))}"
     test_classes_dir = "#{File.expand_path('./test_classes/.', File.dirname(__FILE__))}"
     test_classes_files = Dir.glob("#{test_classes_dir}/*.rb")
     test_classes_files.each { |file| FileUtils.cp(file, classes_dir) }
+    @copied_files = Dir.entries(test_classes_dir).select { |file| file[/.+\.rb\z/] }
   end
 
   subject(:constructor) { Constructor }
@@ -50,6 +29,21 @@ describe Constructor do
     files_to_delete.each { |file| remove_file(file, force = false) }
   end
 =end
+
+  describe '.library_union_loader' do
+    subject(:modules_files)  { Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size }
+    subject(:classes_files)  { Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size }
+    subject(:loaded_modules) { Constructor.modules.size }
+    subject(:loaded_classes) { Constructor.classes.keys.size }
+
+    it 'should load all *.rb files from modules dir' do
+      expect(modules_files).to eq(loaded_modules)
+    end
+
+    it 'should load all *.rb files from classes dir' do
+      expect(classes_files).to eq(loaded_classes)
+    end
+  end
 
   describe '.build' do
     subject(:build) { constructor.build }
