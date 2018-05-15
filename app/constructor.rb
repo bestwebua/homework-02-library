@@ -28,7 +28,7 @@ class Constructor
   end
 
   def self.attributes
-    @attributes ||= self.build['classes'].map { |attribute| (attribute + 's').to_sym }
+    @attributes ||= self.build['classes'].map { |attribute| :"#{attribute}s" }
   end
 
   def self.classes
@@ -40,7 +40,8 @@ class Constructor
   end
 
   def self.instance_variable(target)
-    @vars ||= self.classes.keys.zip(self.attributes.map { |item| '@' + item.to_s }).to_h
+    @vars ||= self.classes.keys.zip(self.attributes.map { |item| "@#{item}" }).to_h
+    raise TypeError, "#{target} is unknown target! Use one of: #{@vars.keys.join(', ')}" unless @vars[target]
     @vars[target]
   end
 
