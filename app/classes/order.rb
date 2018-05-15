@@ -1,6 +1,5 @@
 class Order < LibraryUnionClass
-  
-  @@id = '00001'
+  @@id = 1
 
   attr_reader :book, :reader, :date, :id
 
