@@ -4,9 +4,13 @@ module Storage
   attr_reader :filename
   
   def load(filename)
-    return 'File not found' unless File.exist?("#{File.absolute_path('data')}/#{filename}.yml")
     
-    file = File.new("#{File.absolute_path('data')}/#{filename}.yml", 'r')
+    begin
+      file = File.open("#{File.absolute_path('data')}/#{filename}.yml", 'r')
+    rescue
+      raise ArgumentError, 'File not found'
+    end
+
     import = YAML.load(file)
     
     self.instance_variables.each do |inst_var|
@@ -21,7 +25,7 @@ module Storage
 
   def save(custom_filename=nil)
     path = "#{File.absolute_path('data')}"
-    autoname = ('data-' + Time.now.strftime('%Y%m%d-%H%M%S'))
+    autoname = "data-#{Time.now.strftime('%Y%m%d-%H%M%S')}"
 
     filename = case
       when @filename && custom_filename.nil? then @filename

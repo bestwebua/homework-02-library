@@ -187,7 +187,7 @@ describe Library do
     end
 
     it "return 'File not found'" do
-      expect(nonexistent_file).to eq('File not found')
+      expect { nonexistent_file }.to raise_error(ArgumentError, 'File not found')
     end
 
     it "return 'Data import was completed successfully!'" do
