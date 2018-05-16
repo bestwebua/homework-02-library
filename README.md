@@ -28,11 +28,15 @@ Available methods:
 ```.count_readers_of_bestsellers_top_3```
 
 Pattern of using, where target - String, key - Symbol, value - any object's type:
+
 ```library_object.add(target, key: value)```
+
 ```library_object.delete(target, key: value)```
 
 Types of target are case insensitive, possible to create object like in case below:
+
 ```library_object.add('Author', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')```
+
 ```library_object.add('AUTHOR', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')```
 
 #### Module: Storage ####
