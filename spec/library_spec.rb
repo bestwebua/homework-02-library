@@ -126,41 +126,56 @@ describe Library do
   end
 
   describe '#top_reader' do
-    let(:fail_top_reader) { library.top_reader }
-    let(:top_reader)      { library.load('rspec'); library.top_reader.name }
+    before           { library.load('rspec') }
+    let(:top_reader) { library.top_reader }
 
-    it 'return nil if nothing found' do
-      expect(fail_top_reader).to be_nil
+    context 'without orders' do
+      it 'return nil' do
+        allow(library).to receive(:orders) { [] }
+        expect(top_reader).to be_nil
+      end
     end
 
-    it 'should equal to most active reader' do
-      expect(top_reader).to eq('John Doe')
+    context 'with orders' do
+      it 'should equal to most active reader' do
+        expect(top_reader.name).to eq('John Doe')
+      end
     end
   end
 
   describe '#top_book' do
-    let(:fail_top_book) { library.top_book }
-    let(:top_book)      { library.load('rspec'); library.top_book.title }
+    before         { library.load('rspec') }
+    let(:top_book) { library.top_book }
 
-    it 'return nil if nothing found' do
-      expect(fail_top_book).to be_nil
+    context 'without orders' do
+      it 'return nil' do
+        allow(library).to receive(:orders) { [] }
+        expect(top_book).to be_nil
+      end
     end
 
-    it 'should equal to most popular book' do
-      expect(top_book).to eq('Test Book 0')
+    context 'with orders' do
+      it 'should equal to most popular book' do
+        expect(top_book.title).to eq('Test Book 0')
+      end
     end
   end
 
   describe '#count_readers_of_bestsellers_top_3' do
-    let(:empty_top)               { library.count_readers_of_bestsellers_top_3 }
-    let(:top3_books_uniq_readers) { library.load('rspec'); library.count_readers_of_bestsellers_top_3 }
+    before        { library.load('rspec') }
+    let(:get_top) { library.count_readers_of_bestsellers_top_3 }
 
-    it 'return 0 if readers of top3 was not found' do
-      expect(empty_top).to be_zero
+    context 'without orders' do
+      it 'return 0' do
+        allow(library).to receive(:orders) { [] }
+        expect(get_top).to be_zero
+      end
     end
 
-    it 'return count for uniq readers only' do
-      expect(top3_books_uniq_readers).to eq(1)
+    context 'with orders' do
+      it 'return count for uniq readers only' do
+        expect(get_top).to eq(1)
+      end
     end
   end
 
