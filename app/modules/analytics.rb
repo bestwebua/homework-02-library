@@ -7,7 +7,7 @@
     top_orders_by(:book).first
   end
 
-  def count_readers_of_bestsellers_top3
+  def count_readers_of_bestsellers_top_3
     top_orders_by(:book, 3).flatten.select { |object| object.is_a?(Order) }.uniq(&:reader).size
   end
 
