@@ -26,10 +26,11 @@ module Storage
   def save(custom_filename=nil)
     path = "#{File.absolute_path('data')}"
     autoname = "data-#{Time.now.strftime('%Y%m%d-%H%M%S')}"
+    was_opened = @filename && custom_filename.nil?
 
     filename = case
-      when @filename && custom_filename.nil? then @filename
-      when (@filename && custom_filename.nil?) || custom_filename.nil? then autoname
+      when was_opened then @filename
+      when was_opened || custom_filename.nil? then autoname
       else custom_filename
     end
 
