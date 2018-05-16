@@ -1,9 +1,7 @@
 require_relative '../app/constructor'
 
 describe 'LibraryUnionClass' do
-  it 'return true' do
-    expect(defined?(LibraryUnionClass)).to eq('constant')
-  end
+  specify { expect(defined?(LibraryUnionClass)).to eq('constant') }
 end
 
 describe Constructor do
@@ -33,10 +31,10 @@ describe Constructor do
   subject(:constructor) { Constructor }
 
   describe '.library_union_loader' do
-    subject(:modules_files)  { Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size }
-    subject(:classes_files)  { Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size }
-    subject(:loaded_modules) { Constructor.modules.size }
-    subject(:loaded_classes) { Constructor.classes.keys.size }
+    let(:modules_files)  { Dir.new('app/modules').entries.select { |file| file[/(.+)\.rb/] }.size }
+    let(:classes_files)  { Dir.new('app/classes').entries.select { |file| file[/(.+)\.rb/] }.size }
+    let(:loaded_modules) { Constructor.modules.size }
+    let(:loaded_classes) { Constructor.classes.keys.size }
 
     it 'should load all *.rb files from modules dir' do
       expect(modules_files).to eq(loaded_modules)
@@ -48,10 +46,10 @@ describe Constructor do
   end
 
   describe '.build' do
-    subject(:build) { constructor.build }
+    let(:build) { constructor.build }
 
     it 'should be a hash' do
-      expect(build.is_a?(Hash)).to eq(true)
+      expect(build).to be_an_instance_of(Hash)
     end
 
     it 'should be a string' do
@@ -63,23 +61,23 @@ describe Constructor do
     end
 
     it "should include string 'classes' as a key" do
-      expect(build.has_key?('classes')).to eq(true)
+      expect(build).to have_key('classes')
     end
 
     it "should return an array by 'classes' key" do
-      expect(build['classes'].is_a?(Array)).to eq(true)
+      expect(build['classes']).to be_an_instance_of(Array)
     end
 
     it "should include string 'test' by 'classes' key" do
-      expect(build['classes'].include?('test'))
+      expect(build['classes'].include?('test')).to eq(true)
     end
   end
 
   describe '.attributes' do
-    subject(:attributes) { constructor.attributes }
+    let(:attributes) { constructor.attributes }
 
     it 'should be an array' do
-      expect(attributes.is_a?(Array)).to eq(true)
+      expect(attributes).to be_an_instance_of(Array)
     end
 
     it 'should include :tests' do
@@ -88,18 +86,18 @@ describe Constructor do
   end
 
   describe '.classes' do
-    subject(:classes) { constructor.classes }
+    let(:classes) { constructor.classes }
 
     it 'should be a hash' do
-      expect(classes.is_a?(Hash)).to eq(true)
+      expect(classes).to be_an_instance_of(Hash)
     end
 
     it "should include string 'Test' as a key" do
-      expect(classes.has_key?('Test')).to eq(true)
+      expect(classes).to have_key('Test')
     end
 
     it "should return an array by 'Test' key" do
-      expect(classes['Test'].is_a?(Array)).to eq(true)
+      expect(classes['Test']).to be_an_instance_of(Array)
     end
 
     it "should include :test_attr by 'Test' key" do
@@ -108,11 +106,11 @@ describe Constructor do
   end
 
   describe '.instance_variable' do
-    subject(:instance_variable) { constructor.instance_variable('Test') }
-    subject(:fail_target)       { constructor.instance_variable('Someconst') }
+    let(:instance_variable) { constructor.instance_variable('Test') }
+    let(:fail_target)       { constructor.instance_variable('Someconst') }
 
     it 'should be a string' do
-      expect(instance_variable.is_a?(String)).to eq(true)
+      expect(instance_variable).to be_an_instance_of(String)
     end
 
     it "should return '@tests' value by 'Test' key" do
@@ -125,13 +123,13 @@ describe Constructor do
   end
 
   describe '.modules' do
-    subject(:modules) { constructor.modules.sort }
-    subject(:modules_files) do
+    let(:modules) { constructor.modules.sort }
+    let(:modules_files) do
       Dir.new('app/modules').entries.map { |file| file[/(.+)\.rb/,1] }.compact.map(&:capitalize).sort
     end
 
     it 'should be an array' do
-      expect(modules.is_a?(Array)).to eq(true)
+      expect(modules).to be_an_instance_of(Array)
     end
 
     it 'should be equal to real files' do
