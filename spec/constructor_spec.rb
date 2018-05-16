@@ -109,6 +109,7 @@ describe Constructor do
 
   describe '.instance_variable' do
     subject(:instance_variable) { constructor.instance_variable('Test') }
+    subject(:fail_target)       { constructor.instance_variable('Someconst') }
 
     it 'should be a string' do
       expect(instance_variable.is_a?(String)).to eq(true)
@@ -116,6 +117,10 @@ describe Constructor do
 
     it "should return '@tests' value by 'Test' key" do
       expect(instance_variable).to eq('@tests')
+    end
+
+    it 'should raise an TypeError error' do
+      expect {fail_target}.to raise_error(TypeError)
     end
   end
 

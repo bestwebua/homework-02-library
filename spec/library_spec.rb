@@ -28,147 +28,135 @@ describe Library do
   end
 
   describe '#add' do
-    describe '#subject.authors' do
-      subject(:authors) do
-        library.add('author', name: 'Test Author', biography: 'Bio')
+    describe '#authors' do
+      let(:add_author) { library.add('author', name: 'Test Author', biography: 'Bio') }
+
+      it 'size should be changed if new author was added' do
+        expect { add_author }.to change { library.authors.size }.from(0).to(1)
       end
 
-      it 'equal to 1 if new author was added' do
-        expect(authors.size).to eq(1)
-      end
-
-      it "return true if item is an object of Author's class" do
-        expect(authors.last.is_a?(Author)).to eq(true)
+      it 'return true' do
+        expect(add_author.last).to be_an_instance_of(Author)
       end
     end
 
-    describe '#subject.books' do
-      subject(:books) do
-        library.add('book', title: 'Test Book', author: library.authors.last)
+    describe '#books' do
+      let(:add_book) { library.add('book', title: 'Test Book', author: library.authors.last) }
+
+      it 'size should be changed if new book was added' do
+        expect { add_book }.to change { library.books.size }.from(0).to(1)
       end
 
-      it 'equal to 1 if new book was added' do
-        expect(books.size).to eq(1)
-      end
-
-      it "return true if item is an object of Book's class" do
-        expect(books.last.is_a?(Book)).to eq(true)
+      it 'return true' do
+        expect(add_book.last).to be_an_instance_of(Book)
       end
     end
 
-    describe '#subject.readers' do
-      subject(:readers) do
+    describe '#readers' do
+      let(:add_reader) do
         library.add('reader', name: 'John Doe', email: 'john_doe@domain.com', city: 'City', street: 'Street', house: '42')
       end
 
-      it 'equal to 1 if new reader was added' do
-        expect(readers.size).to eq(1)
+      it 'size should be changed if new book was added' do
+        expect { add_reader }.to change { library.readers.size }.from(0).to(1)
       end
 
-      it "return true if item is an object of Reader's class" do
-        expect(readers.last.is_a?(Reader)).to eq(true)
+      it 'return true' do
+        expect(add_reader.last).to be_an_instance_of(Reader)
       end
     end
 
-    describe '#subject.orders' do
-      subject(:orders) do
+    describe '#orders' do
+      let(:add_order) do
         library.add('order', book: library.books.last, reader: library.readers.last, date: Time.now.strftime('%d.%m.%y'))
       end
 
-      it 'equal to 1 if new order was added' do
-        expect(orders.size).to eq(1)
+      it 'size should be changed if new order was added' do
+        expect { add_order }.to change { library.orders.size }.from(0).to(1)
       end
 
-      it "return true if item is an object of Order's class" do
-        expect(orders.last.is_a?(Order)).to eq(true)
+      it 'return true' do
+        expect(add_order.last).to be_an_instance_of(Order)
       end
     end
-
   end
 
   describe '#delete' do
-    describe '#subject.authors' do
-      subject(:authors) do
-        library.delete('author', name: 'Test Author')
+    let(:library_with_data) { library.load('test'); library }
+    
+    describe '#authors' do
+      let(:remove_authors) do
+        library_with_data.delete('author', name: 'Test Author')
       end
 
-      it 'equal to 0 if author was found and deleted' do
-        expect(authors.size).to eq(0)
-      end
-    end
-
-    describe '#subject.books' do
-      subject(:books) do
-        library.delete('book', title: 'Test Book')
-      end
-
-      it 'equal to 0 if book was found and deleted' do
-        expect(books.size).to eq(0)
+      it 'size should be changed if author was found and deleted' do
+        expect { remove_authors }.to change { library_with_data.authors.size }.from(1).to(0)
       end
     end
 
-    describe '#subject.readers' do
-      subject(:readers) do
+    describe '#books' do
+      let(:remove_books) do
+        library_with_data.delete('book', title: 'Test Book 0')
+      end
+
+      it 'size should be changed if book was found and deleted' do
+        expect { remove_books }.to change { library_with_data.books.size }.from(1).to(0)
+      end
+    end
+
+    describe '#readers' do
+      let(:remove_readers) do
         library.delete('reader', name: 'John Doe')
       end
 
-      it 'equal to 0 if book was found and deleted' do
-        expect(readers.size).to eq(0)
+      it 'size should be changed if book was found and deleted' do
+        expect { remove_readers }.to change { library_with_data.readers.size }.from(2).to(1)
       end
     end
 
-    describe '#subject.orders' do
-      subject(:orders) do
-        library.delete('order', id: '00001')
+    describe '#orders' do
+      let(:remove_order) do
+        library.delete('order', id: 1)
       end
 
-      it 'equal to 0 if order was found and deleted' do
-        expect(orders.size).to eq(0)
+      it 'size should be changed if order was found and deleted' do
+        expect { remove_order }.to change { library_with_data.orders.size }.from(1).to(0)
       end
     end
   end
 
   describe '#top_reader' do
-    subject(:fail_top_reader) { library.top_reader }
-    subject(:top_reader) do
-      library.load('rspec')
-      library.top_reader
-    end
+    let(:fail_top_reader) { library.top_reader }
+    let(:top_reader)      { library.load('rspec'); library.top_reader.name }
 
     it 'return nil if nothing found' do
-      expect(fail_top_reader).to eq(nil)
+      expect(fail_top_reader).to be_nil
     end
 
     it 'should equal to most active reader' do
-      expect(top_reader.name).to eq('John Doe')
+      expect(top_reader).to eq('John Doe')
     end
   end
 
   describe '#top_book' do
-    subject(:fail_top_book) { library.top_book }
-    subject(:top_book) do
-      library.load('rspec')
-      library.top_book
-    end
+    let(:fail_top_book) { library.top_book }
+    let(:top_book)      { library.load('rspec'); library.top_book.title }
 
     it 'return nil if nothing found' do
-      expect(fail_top_book).to eq(nil)
+      expect(fail_top_book).to be_nil
     end
 
     it 'should equal to most popular book' do
-      expect(top_book.title).to eq('Test Book 0')
+      expect(top_book).to eq('Test Book 0')
     end
   end
 
-  describe '#count_readers_of_bestsellers_top3' do
-    subject(:empty_top) { library.count_readers_of_bestsellers_top3 }
-    subject(:top3_books_uniq_readers) do
-      library.load('rspec')
-      library.count_readers_of_bestsellers_top3
-    end
+  describe '#count_readers_of_bestsellers_top_3' do
+    let(:empty_top)               { library.count_readers_of_bestsellers_top_3 }
+    let(:top3_books_uniq_readers) { library.load('rspec'); library.count_readers_of_bestsellers_top_3 }
 
     it 'return 0 if readers of top3 was not found' do
-      expect(empty_top).to eq(0)
+      expect(empty_top).to be_zero
     end
 
     it 'return count for uniq readers only' do
@@ -177,10 +165,10 @@ describe Library do
   end
 
   describe '#load' do
-    subject(:without_filename) { library.load }
-    subject(:nonexistent_file) { library.load('nonexistent_file') }
-    subject(:existing_file)    { library.load('rspec') }
-    subject(:successful_load)  { library.load('rspec') and library.filename }
+    let(:without_filename) { library.load }
+    let(:nonexistent_file) { library.load('nonexistent_file') }
+    let(:existing_file)    { library.load('rspec') }
+    let(:successful_load)  { library.load('rspec'); library.filename }
 
     it 'raise an ArgumentError error' do
       expect { without_filename }.to raise_error(ArgumentError)
@@ -200,7 +188,7 @@ describe Library do
   end
 
   describe '#save' do
-    subject(:load_and_save_without_filename) do
+    let(:load_and_save_without_filename) do
       library.load('rspec')
       library.add('author', name: 'TestName', biography: 'Bio')
       library.save
@@ -208,7 +196,7 @@ describe Library do
       library.authors.last.name
     end
 
-    subject(:load_and_save_with_new_name) do
+    let(:load_and_save_with_new_name) do
       library.load('rspec')
       library.delete('author', name: 'TestName')
       library.save('rspec')
@@ -216,7 +204,7 @@ describe Library do
       library.authors.last.name
     end
 
-    subject(:save_without_filename) do
+    let(:save_without_filename) do
       new_library = Library.new
       new_library.add('author', name: 'TestName', biography: 'Bio')
       new_library.save

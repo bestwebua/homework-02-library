@@ -22,7 +22,7 @@ readers:
   house: '42'
 orders:
 - !ruby/object:Order
-  id: '00001'
+  id: 1
   date: 02.05.18
   reader: *2
   book: *3
