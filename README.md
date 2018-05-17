@@ -40,7 +40,7 @@ Types of target are case insensitive, possible to create object like in case bel
 ```library_object.add('AUTHOR', name: 'Rod Duncan', biography: 'Awesome Rod Duncan bio...')```
 
 #### Module: Storage ####
-This module is extend Library class functional to load and save data from project_root/data folder. Keep in mind that working with .yml files which are available available from a data/ folder only.
+This module is extend Library class functional to load and save data from project_root/data folder. Keep in mind that working with .yml files which are available from a data/ folder only.
 
 ```.load('filename')``` - example for load data from exist YAML-file located into project data folder. Please note, .load method will be rewrite all data of Library, not merge or add.
 
